@@ -30,9 +30,7 @@ def findNumber(row, col_start, lines):
 
     return num
 
-        
-
-if __name__ == "__main__":
+def part_one():
     lines = []
     sum = 0
 
@@ -77,7 +75,61 @@ if __name__ == "__main__":
                                 temp_col-=1
 
     print(sum)
-        
+
+def part_two():
+    lines = []
+    sum = 0
+
+    # Turn text file into a multi dimensional array(list of lists.)
+    with open("./Day_three/big.txt") as file:
+        for line in file:
+            lines.append(list(line))
+
+    lines = [line if not line[-1] == "\n" else line[:-1] for line in lines]
+
+    # Iterate and find all symbols
+    for row_index, row in enumerate(lines):
+        for col_index, val in enumerate(row):
+            if val == "*":
+                nums = []
+
+                # Checking all 8 adjacent cells
+                for direction in DIRECTIONS:
+                    row_dir = direction[0]
+                    col_dir = direction[1]
+
+                    # Check if we are at the edge
+                    if col_index == 0 and col_dir == -1:
+                        continue
+                    if row_index == 0 and row_dir == -1:
+                        continue
+                    if col_index == len(lines[0]) - 1 and col_dir == 1:
+                        continue
+                    if row_index == len(lines) - 1 and row_dir == 1:
+                        continue
+
+                    if is_Int(lines[row_index + row_dir][col_index + col_dir]) and not f"{row_index + row_dir}, {col_index + col_dir}" in SEEN:
+                        temp_col = col_index + col_dir
+
+                        while True:
+                            if temp_col == 0:
+                                nums.append(int(findNumber(row_index + row_dir, temp_col, lines)))
+                                break
+
+                            if not is_Int(lines[row_index + row_dir][temp_col - 1]):
+                                nums.append(int(findNumber(row_index + row_dir, temp_col, lines)))
+                                break
+                            else:
+                                temp_col-=1
+
+                if len(nums) == 2:
+                    sum += nums[0] * nums[1] 
+
+    print(sum)
+    
+
+if __name__ == "__main__":
+    part_two()
 
 
 
