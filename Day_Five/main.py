@@ -104,10 +104,10 @@ def part_one_half():
     seeds = ""
 
     count = 0
-    with open("./Day_Five/example1.txt") as file:
+    with open("./Day_Five/big.txt") as file:
         for line in file:
             if "seeds" in line:
-                seeds = line
+                seeds = line.split(":")[1]
             elif ":" in line:
                 count+= 1
             else:
@@ -116,8 +116,33 @@ def part_one_half():
                     pass
                 maps[count].append(line)
 
-    print(maps)
-            
+    for s in seeds.strip().split(" "):
+        seed = int(s)
+        for map in maps:
+            if map == []:
+                continue
+            seed = convert_to(map, seed)
+        print(seed)
+        
+    
+
+
+def convert_to(map, seed):
+    for ins in map:
+        if ins == '':
+            continue
+        
+        conversion = seed
+        destination = int(ins.strip().split(' ')[0])
+        source = int(ins.strip().split(' ')[1])
+        _range = int(ins.strip().split(' ')[2])
+
+        if seed in range(source, source + _range):
+            diff = seed - source
+            conversion = destination + diff
+            return conversion
+        
+    return seed
 
 
 if __name__ == "__main__":
