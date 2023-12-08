@@ -83,14 +83,6 @@ def find_location(seed):
 
 
 def part_one_half():
-    seed_soil = []
-    soil_fertilizer = []
-    fertilizer_water = []
-    water_light = []
-    light_temperature = []
-    temperature_humidity = []
-    humidity_location = []
-
     ss_map = []
     sf_map = []
     fw_map = []
@@ -123,7 +115,54 @@ def part_one_half():
                 continue
             seed = convert_to(map, seed)
         print(seed)
-        
+
+def part_two():
+    ss_map = []
+    sf_map = []
+    fw_map = []
+    wl_map = []
+    lt_map = []
+    th_map = []
+    hl_map = []
+
+    maps = [[], ss_map, sf_map, fw_map, wl_map, lt_map, th_map, hl_map]
+
+    seeds = ""
+
+    count = 0
+    with open("./Day_Five/big.txt") as file:
+        for line in file:
+            if "seeds" in line:
+                seeds = line.split(":")[1]
+            elif ":" in line:
+                count+= 1
+            else:
+                line = line.strip()
+                if line == '':
+                    pass
+                maps[count].append(line)
+
+    seeds = seeds.strip().split(" ")
+    lowest_location = 0
+    for i in range(0, len(seeds), 2):
+        seeds_start = int(seeds[i])
+        seeds_range = int(seeds[i + 1])
+        seeds_end = seeds_start + seeds_range 
+        print(range(seeds_start, seeds_end))
+
+        for s in range(seeds_start, seeds_end):
+            seed = int(s)
+            for map in maps:
+                if map == []:
+                    continue
+                seed = convert_to(map, seed)
+            
+            if lowest_location == 0:
+                lowest_location = seed
+            else:
+                lowest_location = seed if seed < lowest_location else lowest_location
+
+    print(lowest_location) 
     
 
 
@@ -146,4 +185,4 @@ def convert_to(map, seed):
 
 
 if __name__ == "__main__":
-    part_one_half()
+    part_two()
